@@ -3,9 +3,9 @@ const { getUsers, updateUser } = require('../controllers/users');
 const { userValidation } = require('../middlewares/validation');
 
 // возвращает информацию о пользователе (email и имя)
-router.get('/users/me', getUsers);
+router.get('/me', getUsers);
 
 // обновляет информацию о пользователе (email и имя)
-router.patch('/users/me', userValidation, updateUser);
+router.patch('/me', userValidation, updateUser);
 
 module.exports = router;

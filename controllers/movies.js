@@ -52,7 +52,7 @@ module.exports.createMovies = (req, res, next) => {
 };
 
 module.exports.deleteMovies = (req, res, next) => {
-  Movies.findById(req.params.cardId)
+  Movies.findById(req.params.movieId)
     .orFail(() => {
       throw new NotFound('Карточка не найдена');
     })

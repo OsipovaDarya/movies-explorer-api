@@ -9,6 +9,7 @@ const ConflictingRequest = require('../errors/ConflictingRequest');
 const CastError = require('../errors/CastError');
 
 module.exports.getUsers = (req, res, next) => {
+  console.log('fsdfs');
   User.find({})
     .then((user) => res.send(user))
     .catch(next);
