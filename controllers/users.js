@@ -23,24 +23,20 @@ module.exports.updateUser = (req, res, next) => {
     })
     .then((user) => {
       if (user.email === email) {
-        throw new DuplicationError('Дублирование');
+        throw new DuplicationError('Этот email уже используется');
       }
       User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
         .then((users) => res.send(users))
         .catch((error) => {
-          console.log('f3', error);
           if (error.name === 'ValidationError') {
             next(new CastError('Ошибка проверки данных'));
-          } else if (error.codeName === 'DuplicateKey') {
-            next(new CastError('ошибка'));
           } else {
             next(error);
           }
         });
     }).catch((error) => {
-      console.log(error, ' asfsaf');
       if (error.name === 'DuplicationError') {
-        next(new CastError('Дублирование'));
+        next(new DuplicationError('Этот email уже используется'));
       } else {
         next(error);
       }
