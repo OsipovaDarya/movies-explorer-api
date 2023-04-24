@@ -3,14 +3,14 @@ const { URL } = require('../utils/url');
 
 module.exports.userValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
+    name: Joi.string().required(),
     email: Joi.string().required().email(),
   }),
 });
 
 module.exports.sigupinValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
+    name: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(6),
   }),

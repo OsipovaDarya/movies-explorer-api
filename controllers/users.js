@@ -7,9 +7,9 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFound = require('../errors/NotFound');
 const ConflictingRequest = require('../errors/ConflictingRequest');
 const CastError = require('../errors/CastError');
+const DuplicationError = require('../errors/DuplicationError');
 
 module.exports.getUsers = (req, res, next) => {
-  console.log('fsdfs');
   User.find({})
     .then((user) => res.send(user))
     .catch(next);
@@ -17,14 +17,30 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.updateUser = (req, res, next) => {
   const { name, email } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+  User.findById(req.user._id)
     .orFail(() => {
       throw new NotFound('Пользователь не найден');
     })
-    .then((users) => res.send(users))
-    .catch((error) => {
-      if (error.name === 'ValidationError') {
-        next(new CastError('Ошибка проверки данных'));
+    .then((user) => {
+      if (user.email === email) {
+        throw new DuplicationError('Дублирование');
+      }
+      User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+        .then((users) => res.send(users))
+        .catch((error) => {
+          console.log('f3', error);
+          if (error.name === 'ValidationError') {
+            next(new CastError('Ошибка проверки данных'));
+          } else if (error.codeName === 'DuplicateKey') {
+            next(new CastError('ошибка'));
+          } else {
+            next(error);
+          }
+        });
+    }).catch((error) => {
+      console.log(error, ' asfsaf');
+      if (error.name === 'DuplicationError') {
+        next(new CastError('Дублирование'));
       } else {
         next(error);
       }

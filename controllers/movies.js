@@ -4,7 +4,8 @@ const CastError = require('../errors/CastError');
 const Forbidden = require('../errors/Forbidden');
 
 module.exports.getMovies = (req, res, next) => {
-  Movies.findById(req.user._id)
+  console.log('fsdfsdf');
+  Movies.find({ owner: req.user._id })
     .orFail(() => {
       throw new NotFound('Пользователь не найден');
     })
@@ -54,7 +55,7 @@ module.exports.createMovies = (req, res, next) => {
 module.exports.deleteMovies = (req, res, next) => {
   Movies.findById(req.params.movieId)
     .orFail(() => {
-      throw new NotFound('Карточка не найдена');
+      throw new NotFound('Нельзя удалять чужие фильмы');
     })
     .then((movie) => {
       const owner = movie.owner.toString();
@@ -65,7 +66,7 @@ module.exports.deleteMovies = (req, res, next) => {
           })
           .catch(next);
       } else {
-        throw new Forbidden('Доступ к странице запрещен');
+        throw new Forbidden('Нельзя удалить чужой фильм');
       }
     })
     .catch((error) => {

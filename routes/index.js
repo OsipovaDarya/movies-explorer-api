@@ -17,7 +17,7 @@ router.post('/signin', siginupValidation, login);
 router.use(auth);
 
 router.use('/users', usersRoutes);
-router.use('/', moviesRoutes);
+router.use('/movies', moviesRoutes);
 
 router.use('*', (req, res, next) => next(new NotFound('Неправильный путь')));
 
