@@ -4,10 +4,9 @@ const CastError = require('../errors/CastError');
 const Forbidden = require('../errors/Forbidden');
 
 module.exports.getMovies = (req, res, next) => {
-  console.log('fsdfsdf');
   Movies.find({ owner: req.user._id })
     .orFail(() => {
-      throw new NotFound('Пользователь не найден');
+      throw new NotFound('Фильмы не найдены');
     })
     .then((movies) => res.send(movies))
     .catch(next);

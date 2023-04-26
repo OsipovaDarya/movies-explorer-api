@@ -4,15 +4,15 @@ const auth = require('../middlewares/auth');
 const usersRoutes = require('./users');
 const moviesRoutes = require('./movies');
 const NotFound = require('../errors/NotFound');
-const { sigupinValidation, siginupValidation } = require('../middlewares/validation');
+const { sigininValidation, siginupValidation } = require('../middlewares/validation');
 
 // создаёт пользователя с переданными в теле
 // email, password и name
-router.post('/signup', sigupinValidation, createUser);
+router.post('/signup', siginupValidation, createUser);
 
 // проверяет переданные в теле почту и пароль
 // и возвращает JWT
-router.post('/signin', siginupValidation, login);
+router.post('/signin', sigininValidation, login);
 
 router.use(auth);
 
