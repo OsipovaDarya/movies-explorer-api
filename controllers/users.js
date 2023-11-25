@@ -10,7 +10,7 @@ const CastError = require('../errors/CastError');
 const DuplicationError = require('../errors/DuplicationError');
 
 module.exports.getUsers = (req, res, next) => {
-  User.findById(req.user._id)
+  User.find({})
     .then((user) => res.send(user))
     .catch(next);
 };
